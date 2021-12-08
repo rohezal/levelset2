@@ -150,22 +150,45 @@ void Container::addTask(int x, int y, int value)
 
 void Container::exportToPng(const std::string& filename) const
 {
-	png::image< png::gray_pixel_16 > pngimage(path.size(), path[0].size());
-	png::image< png::gray_pixel_16 > pngimage_way(path.size(), path[0].size());
-
-	for (int a = 0; a < pngimage.get_height(); a++)
+	if(path_image.size() == 0)
 	{
-		for (int b = 0; b < pngimage.get_width(); b++)
+		png::image< png::gray_pixel_16 > pngimage(path.size(), path[0].size());
+
+		for (int a = 0; a < pngimage.get_height(); a++)
 		{
-			uint32_t temp = path[a][b];
-			temp = temp > 65000 ? 65000 : temp;
-			pngimage[a][b] = temp;
-			temp = path_image[a][b];
-			pngimage_way[a][b] = temp;
+			for (int b = 0; b < pngimage.get_width(); b++)
+			{
+				uint32_t temp = path[a][b];
+				temp = temp > 65000 ? 65000 : temp;
+				pngimage[a][b] = temp;
+			}
 		}
+		pngimage.write(filename);
 	}
-	pngimage.write(filename);
-	pngimage_way.write(std::string("way")+filename);
+
+	else
+	{
+		png::image< png::gray_pixel_16 > pngimage(path.size(), path[0].size());
+		png::image< png::gray_pixel_16 > pngimage_way(path.size(), path[0].size());
+
+		for (int a = 0; a < pngimage.get_height(); a++)
+		{
+			for (int b = 0; b < pngimage.get_width(); b++)
+			{
+				uint32_t temp = path[a][b];
+				temp = temp > 65000 ? 65000 : temp;
+				pngimage[a][b] = temp;
+				temp = path_image[a][b];
+				pngimage_way[a][b] = temp;
+			}
+		}
+		pngimage.write(filename);
+		pngimage_way.write(std::string("way")+filename);
+	}
+
+
+
+
 }
 
 void Container::clear()
@@ -173,6 +196,25 @@ void Container::clear()
 	path_image.clear();
 	path.clear();
 	tasks.clear();
+}
+
+std::pair<int, int> Container::getFreePixelAfter(int x, int y)
+{
+	std::pair<int,int> result;
+	result.first = -1;
+	result.second = -1;
+	for(int a = y; a < image.size(); a++)
+	{
+		for(int b = x+1; b < image[0].size(); b++)
+		{
+			if(image[a][b] > 0)
+			{
+				result.second = a;
+				result.first = b;
+				return result;
+			}
+		}
+	}
 }
 
 void Container::drawPath(int posx, int posy, int endx, int endy)

@@ -23,6 +23,7 @@ class Container
 		void debug() const;
 		void exportToPng(const std::string& filename) const;
 		void clear();
+		std::pair<int,int> getFreePixelAfter(int x, int y);
 
 		inline bool validCords(int x, int y) const
         {
