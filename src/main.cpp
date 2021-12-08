@@ -17,8 +17,6 @@ int main()
     container.findWay(sy,sx,ey,ex);
     container.drawPath(ex,ey,sx,sy);
 
-    std::cout << "Img("<<sy<<","<<sx<<"): " << container.path[sy][sx] << std::endl;
-    std::cout << "Img(" << ey << "," << ex <<"): " << container.path[ey][ex] << std::endl;
 
     /*
     container.path[sx][sy] = 65000;

@@ -16,3 +16,5 @@ if (PNG_FOUND)
   include_directories(${PNG_INCLUDE_DIRS})
   target_link_libraries (levelset LINK_PUBLIC ${PNG_LIBRARIES})
 endif (PNG_FOUND)
+
+add_library(findpath SHARED src/levelset.cpp)

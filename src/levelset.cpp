@@ -192,6 +192,14 @@ void Container::exportToPng(const std::string& filename) const
 	pngimage_way.write(std::string("way")+filename);
 }
 
+void Container::clear()
+{
+	image.clear();
+	path.clear();
+	tasks.clear();
+	data.clear();
+}
+
 void Container::drawPath(int posx, int posy, int endx, int endy)
 {
 	if(posx == endx && posy == endy)
