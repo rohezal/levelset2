@@ -117,30 +117,6 @@ std::pair<int,int> Container::getNextTask(int endx, int endy, int level)
 	return cell;
 }
 
-void Container::nextTask(int endx, int endy, int level)
-{
-	int key = (*(tasks.begin())).first;
-	std::vector<std::pair<int,int> >& taskvector = tasks[key];
-
-	if(taskvector.size() == 0)
-	{
-			std::cout << "ERROR! VECTOR EMPTY FROM MAP IN nextTask" << std::endl;
-	}
-
-	std::pair<int,int> cell = taskvector.back();
-
-	taskvector.pop_back();
-
-	if(taskvector.size() == 0)
-	{
-		tasks.erase(key);
-	}
-
-
-	findWay(cell.first, cell.second, endx, endy, level);
-}
-
-
 void Container::tagCell(int x, int y, int value)
 {
 	if(validCords(x,y))
@@ -197,7 +173,6 @@ void Container::clear()
 	image.clear();
 	path.clear();
 	tasks.clear();
-	data.clear();
 }
 
 void Container::drawPath(int posx, int posy, int endx, int endy)
@@ -212,19 +187,4 @@ void Container::drawPath(int posx, int posy, int endx, int endy)
 
 	drawPath(min.first,min.second,endx,endy);
 
-}
-
-void Container::debug() const
-{
-	int counter = 0;
-
-	for(size_t i = 0; i < data.size(); i++)
-	{
-		if(data[i].size() > 0)
-		{
-			counter++;
-			std::cout << "Container " << i << ": " << data[i].size() << std::endl;
-		}
-	}
-	std::cout << "Filled containers" << " " << ": " << counter << std::endl;
 }

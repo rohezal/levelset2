@@ -17,7 +17,6 @@ class Container
 
 		void findWay(int posx, int posy, int endx, int endy, int level = 0);
 		std::pair<int,int> getNextTask(int endx, int endy, int level);
-		void nextTask(int endx, int endy, int level);
 		void tagCell(int x, int y, int value);
 		void addTask(int x, int y, int value);
 		void drawPath(int posx, int posy, int endx, int endy);
@@ -72,7 +71,6 @@ class Container
 	private:
         std::set<int> lookup;
         std::map<int,std::vector<std::pair<int,int> > > tasks;
-		std::vector<std::vector<std::pair<int,int> > > data;
         std::vector<std::vector<u_int16_t > >image;
         std::vector<std::vector<u_int32_t > > path;
         uint32_t goal_distance = infinity;
