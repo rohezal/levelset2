@@ -57,12 +57,12 @@ class Container
             return std::pair<int,int>(minx,miny);
         }
 
-		std::vector<std::vector<u_int16_t > >& getImage()
+		inline std::vector<std::vector<u_int16_t > >& getImage()
 		{
 			return image;
 		}
 
-		std::vector<std::vector<u_int32_t > >& getPath()
+		inline std::vector<std::vector<u_int32_t > >& getPath()
 		{
 			return path;
 		}
@@ -72,6 +72,7 @@ class Container
         std::set<int> lookup;
         std::map<int,std::vector<std::pair<int,int> > > tasks;
         std::vector<std::vector<u_int16_t > >image;
+		std::vector<std::vector<u_int16_t > > path_image;
         std::vector<std::vector<u_int32_t > > path;
         uint32_t goal_distance = infinity;
 };

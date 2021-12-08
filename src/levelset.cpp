@@ -160,7 +160,7 @@ void Container::exportToPng(const std::string& filename) const
 			uint32_t temp = path[a][b];
 			temp = temp > 65000 ? 65000 : temp;
 			pngimage[a][b] = temp;
-			temp = image[a][b];
+			temp = path_image[a][b];
 			pngimage_way[a][b] = temp;
 		}
 	}
@@ -170,7 +170,7 @@ void Container::exportToPng(const std::string& filename) const
 
 void Container::clear()
 {
-	image.clear();
+	path_image.clear();
 	path.clear();
 	tasks.clear();
 }
@@ -182,7 +182,9 @@ void Container::drawPath(int posx, int posy, int endx, int endy)
 		return;
 	}
 
-	this->image[posy][posx] = 256*128;
+	path_image = image;
+
+	this->path_image[posy][posx] = 256*128;
 	std::pair<int,int> min = getMinimum(posx,posy);
 
 	drawPath(min.first,min.second,endx,endy);

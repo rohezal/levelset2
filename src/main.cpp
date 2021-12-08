@@ -17,13 +17,13 @@ int main()
     container.findWay(sy,sx,ey,ex);
     container.drawPath(ex,ey,sx,sy);
 
-
     /*
     container.path[sx][sy] = 65000;
     container.path[ex][ey] = 65000;
     */
 
     container.exportToPng("path.png");
+	container.clear();
 
 	return 0;
 }
