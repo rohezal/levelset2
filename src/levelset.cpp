@@ -184,9 +184,15 @@ void Container::drawPath(int posx, int posy, int endx, int endy)
 
 	path_image = image;
 
-	this->path_image[posy][posx] = 256*128;
-	std::pair<int,int> min = getMinimum(posx,posy);
+	while (!(posx == endx && posy == endy))
+	{
+		this->path_image[posy][posx] = 256*128;
+		std::pair<int,int> min = getMinimum(posx,posy);
 
-	drawPath(min.first,min.second,endx,endy);
+		posx = min.first;
+		posy = min.second;
+	}
+
+	//drawPath(min.first,min.second,endx,endy);
 
 }
