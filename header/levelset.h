@@ -9,6 +9,7 @@
 
 const uint32_t infinity = (256*256*255+254);
 const uint32_t max_value = infinity-1;
+const uint16_t NOT_SEGMENTED = (256*255+254);
 
 class Container
 {
@@ -17,13 +18,18 @@ class Container
 
 		void findWay(int posx, int posy, int endx, int endy, int level = 0);
 		std::pair<int,int> getNextTask(int endx, int endy, int level);
-		void tagCell(int x, int y, int value);
+		std::pair<int,int> getNextTask();
+
+		void tagCell(int x, int y, int value, int color_segment = -1);
 		void addTask(int x, int y, int value);
 		void drawPath(int posx, int posy, int endx, int endy);
 		void debug() const;
 		void exportToPng(const std::string& filename) const;
 		void clear();
 		std::pair<int,int> getFreePixelAfter(int x, int y);
+		void doSegmentImage();
+		int getNumberOfSegments();
+		void partlySegment(int posx, int posy);
 
 		inline bool validCords(int x, int y) const
         {
@@ -73,9 +79,11 @@ class Container
         std::set<int> lookup;
         std::map<int,std::vector<std::pair<int,int> > > tasks;
         std::vector<std::vector<u_int16_t > >image;
+		std::vector<std::vector<u_int16_t > > segmented_image;
 		std::vector<std::vector<u_int16_t > > path_image;
         std::vector<std::vector<u_int32_t > > path;
         uint32_t goal_distance = infinity;
+		int number_of_segments;
 };
 
 

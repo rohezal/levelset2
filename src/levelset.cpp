@@ -1,7 +1,7 @@
 #include "levelset.h"
 
 
-Container::Container(const png::image<png::gray_pixel_16>& _image)
+Container::Container(const png::image<png::gray_pixel_16>& _image) : number_of_segments(0)
 {
     for (int a = 0; a < _image.get_height(); a++)
     {
@@ -117,12 +117,22 @@ std::pair<int,int> Container::getNextTask(int endx, int endy, int level)
 	return cell;
 }
 
-void Container::tagCell(int x, int y, int value)
+std::pair<int, int> Container::getNextTask()
+{
+	return getNextTask(0,0,0);
+}
+
+void Container::tagCell(int x, int y, int value, int color_segment)
 {
 	if(validCords(x,y))
 	{
 		if(path[y][x] > value && path[y][x] < infinity)
 		{
+			if(color_segment > -1)
+			{
+				segmented_image[y][x] = color_segment;
+			}
+
 			path[y][x] = value;
 			addTask(x,y,value);
 		}
@@ -215,6 +225,76 @@ std::pair<int, int> Container::getFreePixelAfter(int x, int y)
 			}
 		}
 	}
+}
+
+void Container::doSegmentImage()
+{
+	segmented_image = image;
+
+	for(size_t y = 0; y < segmented_image.size(); y++)
+	{
+		for(size_t x = 0; x < segmented_image.size(); x++)
+		{
+			if(segmented_image[y][x] > 0)
+			{
+				segmented_image[y][x] = NOT_SEGMENTED;
+			}
+		}
+	}
+
+	for(size_t y = 0; y < segmented_image.size(); y++)
+	{
+		for(size_t x = 0; x < segmented_image.size(); x++)
+		{
+			if(segmented_image[y][x] != 0 && segmented_image[y][x] != NOT_SEGMENTED)
+			{
+				partlySegment(x,y);
+				number_of_segments++;
+			}
+		}
+	}
+
+
+}
+
+int Container::getNumberOfSegments()
+{
+	return number_of_segments;
+}
+
+void Container::partlySegment(int posx, int posy)
+{
+	std::pair<int,int> nextcell;
+
+	path[posy][posx] = 0;
+	nextcell.first = posx;
+	nextcell.second = posy;
+
+	do
+	{
+		posx = nextcell.first;
+		posy = nextcell.second;
+
+		const uint32_t current_value = path[posy][posx];
+
+		if(validCords(posx,posy))
+		{
+			for(int a = -1; a <= 1; a++)
+			{
+				for(int b = -1; b <= 1; b++)
+				{
+					int nposx = posx+b;
+					int nposy = posy+a;
+					tagCell(nposx,nposy,current_value+1,number_of_segments);
+				}
+			}
+		}
+		if(tasks.size() > 0)
+		{
+		   nextcell = getNextTask();
+		}
+	}
+	while (tasks.size() > 0);
 }
 
 void Container::drawPath(int posx, int posy, int endx, int endy)
